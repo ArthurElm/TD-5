@@ -40,7 +40,7 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-     - name: 'Build Inventory Image'
-       run: |
-          docker build . --tag ghcr.io/arthurelm/td-5:latest
-          docker push ghcr.io/arthurelm/td-5:latest
+    - name: 'Build Inventory Image'
+      run: |
+         docker build . --tag ghcr.io/arthurelm/td-5:latest
+         docker push ghcr.io/arthurelm/td-5:latest
