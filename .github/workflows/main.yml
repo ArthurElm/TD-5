@@ -1,22 +1,49 @@
-name: gitops-autover
+name: CI/CD
 
 on:
   push:
-    branches:
-    - main
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  use-action:
-    name: Verify GitOps AutoVer Action
+  build:
+
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
     steps:
-    - uses: actions/checkout@v3
-    - name: Run GitOps Automatic Versioning Action
-      id: gitops-autover
-      uses: AlexAtkinson/github-action-gitops-autover@0.1.7
-    - name: Verify Outputs
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run the tests and generate coverage report
+      run: npm test -- --coverage
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+
+    - name: Build
+      run: npm run build
+
+    - name: Deploy
       run: |
-        NEW_VERSION=${{ steps.gitops-autover.outputs.new-version }}
-        echo "new-version: $NEW_VERSION"
-        PREVIOUS_VERSION=${{ steps.gitops-autover.outputs.previous-version }}
-        echo "previous-version: $PREVIOUS_VERSION"
+        git config --global user.name $user_name
+        git config --global user.email $user_email
+        git remote set-url origin https://${github_token}@github.com/${repository}
+        npm run deploy
+      env:
+        user_name: 'github-actions[bot]'
+        user_email: 'github-actions[bot]@users.noreply.github.com'
+        github_token: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
+        repository: ${{ github.repository }}
