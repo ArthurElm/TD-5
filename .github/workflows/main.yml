@@ -35,15 +35,10 @@ jobs:
 
     - name: Build
       run: npm run build
-
-    - name: Deploy
-      run: |
-        git config --global user.name ArthurElm
-        git config --global user.email arthur.elmalawi@gmail.com
-        git remote set-url origin https://${github_token}@github.com/
-        npm run deploy
-      env:
-        user_name: 'github-actions[bot]'
-        user_email: 'github-actions[bot]@users.noreply.github.com'
-        github_token: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
-        repository: ${{ github.repository }}
+      
+    - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
