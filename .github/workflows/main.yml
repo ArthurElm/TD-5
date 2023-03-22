@@ -48,4 +48,4 @@ jobs:
       with:
         push: true
         context: .
-        tags: arthurelm/td-5:latest
+        tags: ghcr.io/arthurelm/td-5:latest
