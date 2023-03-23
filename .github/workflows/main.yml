@@ -31,12 +31,21 @@ jobs:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-
+          ${{ runner.os }}-node-
+
     - name: Run the tests and generate coverage report
       run: npm test
+      env: 
+        CI: true
 
     - name: Build
       run: npm run build
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ github.sha }}
+        path: |
+          build
+          Dockerfile
 
     
 
@@ -51,6 +60,14 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ github.sha }}
+          path: |
+            build
+            Dockerfile
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
