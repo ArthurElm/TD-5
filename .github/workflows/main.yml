@@ -1,4 +1,4 @@
-name: CI/CD
+name: CI
 
 on:
   push:
@@ -40,7 +40,16 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
 
-    - name: 'Build Inventory Image'
-      run: |
-         docker build . --tag ghcr.io/arthurelm/td-5:latest
-         docker push ghcr.io/arthurelm/td-5:latest
+    - name: Build and Push
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: push
+        run: ghcr.io/${{ github.actor }}/react-project:latest
+
+
+
+    # - name: 'Build Inventory Image'
+    #   run: |
+    #      docker build . --tag ghcr.io/arthurelm/td-5:latest
+    #      docker push ghcr.io/arthurelm/td-5:${{ github.actor }}
