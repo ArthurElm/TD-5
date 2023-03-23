@@ -69,9 +69,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: ${{ github.sha }}
-          path: |
-            build
-            Dockerfile
+          path: build
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
