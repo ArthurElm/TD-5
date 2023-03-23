@@ -40,6 +40,8 @@ jobs:
 
     - name: Build
       run: npm run build
+      
+    - name: Store artifact
       uses: actions/upload-artifact@v2
       with:
         name: ${{ github.sha }}
