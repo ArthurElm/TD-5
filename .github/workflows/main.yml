@@ -83,4 +83,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.actor }}/react-project:latest
+          tags: ghcr.io/arthurelm/react-project:latest
