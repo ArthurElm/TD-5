@@ -84,5 +84,5 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          push: push
+          push: true
           tags: ghcr.io/${{ github.actor }}/react-project:latest
